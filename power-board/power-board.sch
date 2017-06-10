@@ -1,0 +1,277 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:project
+LIBS:power-board-cache
+EELAYER 25 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 9
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Sheet
+S 7600 3400 1100 400 
+U 5934B65D
+F0 "Main Regulators" 60
+F1 "Main Regulators.sch" 60
+F2 "V_IN" I L 7600 3500 60 
+F3 "5V_OUT" O R 8700 3500 60 
+F4 "SYNC" I L 7600 3700 60 
+F5 "ENABLE" I L 7600 3600 60 
+F6 "SHARE" I R 8700 3700 60 
+$EndSheet
+$Sheet
+S 1100 2500 1100 750 
+U 5934852C
+F0 "Power Entry" 60
+F1 "Power Entry.sch" 60
+F2 "V_IN" O R 2200 2600 60 
+F3 "PWR_IN_GOOD" O R 2200 2700 60 
+F4 "PWR_IN_FAULT" O R 2200 2800 60 
+F5 "PWR_IN_SHDN" I R 2200 2900 60 
+F6 "V_IN_UNLIM" O R 2200 3050 60 
+$EndSheet
+$Sheet
+S 4100 4600 1300 300 
+U 59352B0D
+F0 "V_IN measurement" 60
+F1 "V_IN measurement.sch" 60
+F2 "V_IN" I L 4100 4700 60 
+F3 "VCC" I L 4100 4800 60 
+F4 "VBAT_SENSE" O R 5400 4700 60 
+F5 "VBAT_SENSE_LOAD" I R 5400 4800 60 
+$EndSheet
+$Sheet
+S 2500 3400 1300 300 
+U 59352B2E
+F0 "Supervisor regulator" 60
+F1 "Supervisor regulator.sch" 60
+F2 "V_OUT" O R 3800 3500 60 
+F3 "V_IN" I L 2500 3500 60 
+F4 "EN" I L 2500 3600 60 
+$EndSheet
+$Sheet
+S 5700 3700 1700 2100
+U 59352B4F
+F0 "MCU" 60
+F1 "MCU.sch" 60
+F2 "VCC" I L 5700 4300 60 
+F3 "SDA" B L 5700 5200 60 
+F4 "SCL" B L 5700 5300 60 
+F5 "TEMP_ALERT" I L 5700 5400 60 
+F6 "VBAT_SENSE" I L 5700 4700 60 
+F7 "VBAT_SENSE_LOAD" O L 5700 4800 60 
+F8 "PWR_IN_FAULT" I L 5700 3900 60 
+F9 "PWR_IN_SHDN" O L 5700 4000 60 
+F10 "MAIN_REG_EN" O R 7400 3800 60 
+F11 "PWR_IN_GOOD" I L 5700 3800 60 
+F12 "MOSI" I R 7400 4200 60 
+F13 "MISO" O R 7400 4300 60 
+F14 "SCK" I R 7400 4100 60 
+F15 "PB0" B R 7400 5000 60 
+F16 "PB1" B R 7400 4900 60 
+F17 "PD0" B R 7400 5100 60 
+F18 "PD1" B R 7400 5200 60 
+F19 "PD3" B R 7400 5300 60 
+F20 "PD5" B R 7400 5400 60 
+F21 "ADC6" I R 7400 5700 60 
+F22 "SS" I R 7400 4000 60 
+F23 "PD6" B R 7400 5500 60 
+F24 "PD7" B R 7400 5600 60 
+F25 "SPI_INT" O R 7400 4400 60 
+$EndSheet
+$Sheet
+S 4100 5100 1300 400 
+U 59358E23
+F0 "Temperature Measurement" 60
+F1 "Temp measurement.sch" 60
+F2 "VCC" I L 4100 5200 60 
+F3 "SDA" B R 5400 5200 60 
+F4 "SCL" B R 5400 5300 60 
+F5 "ALERT" O R 5400 5400 60 
+$EndSheet
+Wire Wire Line
+	2500 3600 2300 3600
+Wire Wire Line
+	2400 3500 2500 3500
+Wire Wire Line
+	3900 4300 5700 4300
+Wire Wire Line
+	3900 3500 3900 5200
+Wire Wire Line
+	3900 4800 4100 4800
+Wire Wire Line
+	4000 4700 4100 4700
+Wire Wire Line
+	3900 5200 4100 5200
+Connection ~ 3900 4800
+Wire Wire Line
+	5400 4700 5700 4700
+Wire Wire Line
+	5700 4800 5400 4800
+Wire Wire Line
+	5700 5200 5400 5200
+Wire Wire Line
+	5400 5300 5700 5300
+Wire Wire Line
+	5700 5400 5400 5400
+Connection ~ 3900 4300
+Wire Wire Line
+	2200 2800 5500 2800
+Wire Wire Line
+	5500 2800 5500 3900
+Wire Wire Line
+	5500 3900 5700 3900
+Wire Wire Line
+	5700 4000 5400 4000
+Wire Wire Line
+	5400 4000 5400 2900
+Wire Wire Line
+	5400 2900 2200 2900
+Wire Wire Line
+	7600 3600 7500 3600
+Wire Wire Line
+	7500 3600 7500 3800
+Wire Wire Line
+	7500 3800 7400 3800
+Wire Wire Line
+	2400 3050 2400 3500
+Wire Wire Line
+	2200 3050 4000 3050
+$Comp
+L R R5
+U 1 1 59365CBE
+P 2300 3350
+F 0 "R5" V 2380 3350 50  0000 C CNN
+F 1 "0" V 2300 3350 50  0001 C CNN
+F 2 "" V 2230 3350 50  0000 C CNN
+F 3 "" H 2300 3350 50  0000 C CNN
+F 4 "DNS" V 2300 3350 60  0000 C CNN "Note"
+	1    2300 3350
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2300 3600 2300 3500
+Wire Wire Line
+	2300 2700 2300 3200
+Wire Wire Line
+	5600 3800 5700 3800
+Wire Wire Line
+	5600 2700 5600 3800
+Wire Wire Line
+	2200 2700 5600 2700
+Connection ~ 2300 2700
+Wire Wire Line
+	4000 3050 4000 4700
+Connection ~ 2400 3050
+Wire Wire Line
+	7400 4100 8900 4100
+Wire Wire Line
+	8900 4200 7400 4200
+Wire Wire Line
+	8900 4300 7400 4300
+Wire Wire Line
+	8900 4000 7400 4000
+NoConn ~ 7600 3700
+NoConn ~ 8700 3700
+$Sheet
+S 8900 3800 1150 700 
+U 59393534
+F0 "Control Interface" 60
+F1 "Control Interface.sch" 60
+F2 "SS" O L 8900 4000 60 
+F3 "5V_OUT" I L 8900 3900 60 
+F4 "SCK" O L 8900 4100 60 
+F5 "MISO" I L 8900 4300 60 
+F6 "MOSI" O L 8900 4200 60 
+F7 "SPI_INT" I L 8900 4400 60 
+$EndSheet
+Wire Wire Line
+	3900 3500 3800 3500
+Wire Wire Line
+	8900 4400 7400 4400
+Wire Wire Line
+	8700 3500 8800 3500
+Wire Wire Line
+	8800 3500 8800 4800
+Wire Wire Line
+	8800 3900 8900 3900
+$Sheet
+S 8900 4700 1150 1100
+U 59395C05
+F0 "Light Interface" 60
+F1 "Light Interface.sch" 60
+F2 "5V_OUT" I L 8900 4800 60 
+F3 "CLK" I L 8900 4900 60 
+F4 "D0" I L 8900 5000 60 
+F5 "D1" I L 8900 5100 60 
+F6 "D2" I L 8900 5200 60 
+F7 "D3" I L 8900 5300 60 
+F8 "D4" I L 8900 5400 60 
+F9 "GPIO0" B L 8900 5500 60 
+F10 "GPIO1" B L 8900 5600 60 
+F11 "ADC" O L 8900 5700 60 
+$EndSheet
+Wire Wire Line
+	8800 4800 8900 4800
+Connection ~ 8800 3900
+Wire Wire Line
+	7400 5000 8900 5000
+Wire Wire Line
+	8900 5100 7400 5100
+Wire Wire Line
+	7400 5200 8900 5200
+Wire Wire Line
+	8900 5300 7400 5300
+Wire Wire Line
+	7400 5400 8900 5400
+Wire Wire Line
+	8900 5500 7400 5500
+Wire Wire Line
+	7400 5600 8900 5600
+Wire Wire Line
+	8900 5700 7400 5700
+Wire Wire Line
+	8900 4900 7400 4900
+Wire Wire Line
+	7600 3500 7500 3500
+Wire Wire Line
+	7500 3500 7500 2600
+Wire Wire Line
+	7500 2600 2200 2600
+$EndSCHEMATC
