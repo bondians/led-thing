@@ -1,0 +1,13 @@
+(module Spark_Gap_8mil (layer F.Cu) (tedit 593CA799)
+  (fp_text reference REF** (at 3.15 0.85) (layer F.SilkS) hide
+    (effects (font (size 1 1) (thickness 0.15)))
+  )
+  (fp_text value "Spark Gap 8mil" (at 6.95 -0.65) (layer F.Fab) hide
+    (effects (font (size 1 1) (thickness 0.15)))
+  )
+  (fp_line (start 0 0.11176) (end 0 -0.11176) (layer F.Mask) (width 0.762))
+  (pad 1 smd trapezoid (at 0 -0.6096 180) (size 0.508 1.016) (rect_delta 0 0.50546 ) (layers F.Cu))
+  (pad 2 smd trapezoid (at 0 0.6096) (size 0.508 1.016) (rect_delta 0 0.50546 ) (layers F.Cu))
+  (pad 1 smd rect (at 0 -1.3716 180) (size 1.016 0.508) (layers F.Cu))
+  (pad 2 smd rect (at 0 1.3716) (size 1.016 0.508) (layers F.Cu))
+)
