@@ -34,7 +34,7 @@ EELAYER 25 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 4 12
+Sheet 3 12
 Title ""
 Date ""
 Rev ""
@@ -93,6 +93,8 @@ F 0 "R403" V 5230 3550 50  0000 C CNN
 F 1 "0" V 5150 3550 50  0000 C CNN
 F 2 "Resistors_SMD:R_0603" V 5080 3550 50  0001 C CNN
 F 3 "" H 5150 3550 50  0000 C CNN
+F 4 "Yageo" V 5150 3550 60  0001 C CNN "MFG"
+F 5 "RC0603JR-070RL" V 5150 3550 60  0001 C CNN "MPN"
 	1    5150 3550
 	0    1    1    0   
 $EndComp
