@@ -52,6 +52,8 @@ F 0 "J301" H 2950 3200 50  0000 C CNN
 F 1 "CONN_01X02" V 3050 3050 50  0000 C CNN
 F 2 "Connectors_Terminal_Blocks:TerminalBlock_Pheonix_PT-3.5mm_2pol" H 2950 3050 50  0001 C CNN
 F 3 "" H 2950 3050 50  0001 C CNN
+F 4 "Phoenix Contact" H 2950 3050 60  0001 C CNN "MFG"
+F 5 "1984617" H 2950 3050 60  0001 C CNN "MPN"
 	1    2950 3050
 	-1   0    0    1   
 $EndComp

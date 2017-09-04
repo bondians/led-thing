@@ -56,6 +56,8 @@ F 0 "J901" H 2300 3200 50  0000 C CNN
 F 1 "CONN_01X04" V 2400 2950 50  0000 C CNN
 F 2 "Connectors_Terminal_Blocks:TerminalBlock_Pheonix_PT-3.5mm_4pol" H 2300 2950 50  0001 C CNN
 F 3 "" H 2300 2950 50  0001 C CNN
+F 4 "Phoenix Contact" H 2300 2950 60  0001 C CNN "MFG"
+F 5 "1984633" H 2300 2950 60  0001 C CNN "MPN"
 	1    2300 2950
 	1    0    0    -1  
 $EndComp
@@ -83,8 +85,6 @@ F 3 "" H 1700 3300 50  0001 C CNN
 	1    1700 3300
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	1400 3100 1400 3200
 Wire Wire Line
 	2100 2900 1700 2900
 Text Notes 7250 6700 0    60   ~ 0
@@ -125,22 +125,14 @@ Text Label 3350 900  0    60   ~ 0
 Wire Wire Line
 	2100 2800 1700 2800
 Wire Wire Line
-	1700 2800 1700 2700
+	1700 2700 1700 2800
 Wire Wire Line
-	1700 2700 850  2700
+	850  2700 1700 2700
 Wire Wire Line
 	2100 3100 1700 3100
 Wire Wire Line
 	1700 3100 1700 3300
-Wire Wire Line
-	1100 3200 1700 3200
 Connection ~ 1700 3200
-Wire Wire Line
-	1100 3200 1100 3100
-Connection ~ 1400 3200
-Wire Wire Line
-	1100 2800 1100 2700
-Connection ~ 1100 2700
 Wire Wire Line
 	1400 2800 1400 2700
 Connection ~ 1400 2700
@@ -222,17 +214,6 @@ Wire Wire Line
 Wire Wire Line
 	3000 1600 2500 1600
 $Comp
-L CONN_01X04 J902
-U 1 1 593C76E0
-P 4400 2950
-F 0 "J902" H 4400 3200 50  0000 C CNN
-F 1 "CONN_01X04" V 4500 2950 50  0000 C CNN
-F 2 "Connectors_Terminal_Blocks:TerminalBlock_Pheonix_PT-3.5mm_4pol" H 4400 2950 50  0001 C CNN
-F 3 "" H 4400 2950 50  0001 C CNN
-	1    4400 2950
-	1    0    0    -1  
-$EndComp
-$Comp
 L C C906
 U 1 1 593C76E8
 P 3500 2950
@@ -263,22 +244,16 @@ Wire Wire Line
 Wire Wire Line
 	4200 2800 3800 2800
 Wire Wire Line
-	3800 2800 3800 2700
+	3800 2700 3800 2800
 Wire Wire Line
-	3800 2700 2950 2700
+	2950 2700 3800 2700
 Wire Wire Line
 	4200 3100 3800 3100
 Wire Wire Line
 	3800 3100 3800 3300
 Wire Wire Line
-	3200 3200 3800 3200
+	3500 3200 3800 3200
 Connection ~ 3800 3200
-Wire Wire Line
-	3200 3200 3200 3100
-Connection ~ 3500 3200
-Wire Wire Line
-	3200 2800 3200 2700
-Connection ~ 3200 2700
 Wire Wire Line
 	3500 2800 3500 2700
 Connection ~ 3500 2700
@@ -290,17 +265,6 @@ Text Label 2950 2700 0    60   ~ 0
 5V
 Text Label 3800 3000 0    60   ~ 0
 D1_OUT
-$Comp
-L CONN_01X04 J903
-U 1 1 593C797D
-P 6500 2950
-F 0 "J903" H 6500 3200 50  0000 C CNN
-F 1 "CONN_01X04" V 6600 2950 50  0000 C CNN
-F 2 "Connectors_Terminal_Blocks:TerminalBlock_Pheonix_PT-3.5mm_4pol" H 6500 2950 50  0001 C CNN
-F 3 "" H 6500 2950 50  0001 C CNN
-	1    6500 2950
-	1    0    0    -1  
-$EndComp
 $Comp
 L C C908
 U 1 1 593C7985
@@ -332,21 +296,16 @@ Wire Wire Line
 Wire Wire Line
 	6300 2800 5900 2800
 Wire Wire Line
-	5900 2800 5900 2700
+	5900 2700 5900 2800
 Wire Wire Line
-	5900 2700 5050 2700
+	5050 2700 5900 2700
 Wire Wire Line
 	6300 3100 5900 3100
 Wire Wire Line
 	5900 3100 5900 3300
 Wire Wire Line
-	5300 3200 5900 3200
+	5600 3200 5900 3200
 Connection ~ 5900 3200
-Wire Wire Line
-	5300 3200 5300 3100
-Connection ~ 5600 3200
-Wire Wire Line
-	5300 2800 5300 2700
 Connection ~ 5300 2700
 Wire Wire Line
 	5600 2800 5600 2700
@@ -359,17 +318,6 @@ Text Label 5050 2700 0    60   ~ 0
 5V
 Text Label 5900 3000 0    60   ~ 0
 D2_OUT
-$Comp
-L CONN_01X04 J904
-U 1 1 593C79B0
-P 8600 2950
-F 0 "J904" H 8600 3200 50  0000 C CNN
-F 1 "CONN_01X04" V 8700 2950 50  0000 C CNN
-F 2 "Connectors_Terminal_Blocks:TerminalBlock_Pheonix_PT-3.5mm_4pol" H 8600 2950 50  0001 C CNN
-F 3 "" H 8600 2950 50  0001 C CNN
-	1    8600 2950
-	1    0    0    -1  
-$EndComp
 $Comp
 L C C910
 U 1 1 593C79B8
@@ -401,22 +349,16 @@ Wire Wire Line
 Wire Wire Line
 	8400 2800 8000 2800
 Wire Wire Line
-	8000 2800 8000 2700
+	8000 2700 8000 2800
 Wire Wire Line
-	8000 2700 7150 2700
+	7150 2700 8000 2700
 Wire Wire Line
 	8400 3100 8000 3100
 Wire Wire Line
 	8000 3100 8000 3300
 Wire Wire Line
-	7400 3200 8000 3200
+	7700 3200 8000 3200
 Connection ~ 8000 3200
-Wire Wire Line
-	7400 3200 7400 3100
-Connection ~ 7700 3200
-Wire Wire Line
-	7400 2800 7400 2700
-Connection ~ 7400 2700
 Wire Wire Line
 	7700 2800 7700 2700
 Connection ~ 7700 2700
@@ -428,17 +370,6 @@ Text Label 7150 2700 0    60   ~ 0
 5V
 Text Label 8000 3000 0    60   ~ 0
 D3_OUT
-$Comp
-L CONN_01X04 J905
-U 1 1 593C7ADB
-P 10700 2950
-F 0 "J905" H 10700 3200 50  0000 C CNN
-F 1 "CONN_01X04" V 10800 2950 50  0000 C CNN
-F 2 "Connectors_Terminal_Blocks:TerminalBlock_Pheonix_PT-3.5mm_4pol" H 10700 2950 50  0001 C CNN
-F 3 "" H 10700 2950 50  0001 C CNN
-	1    10700 2950
-	1    0    0    -1  
-$EndComp
 $Comp
 L C C912
 U 1 1 593C7AE3
@@ -470,22 +401,16 @@ Wire Wire Line
 Wire Wire Line
 	10500 2800 10100 2800
 Wire Wire Line
-	10100 2800 10100 2700
+	10100 2700 10100 2800
 Wire Wire Line
-	10100 2700 9250 2700
+	9250 2700 10100 2700
 Wire Wire Line
 	10500 3100 10100 3100
 Wire Wire Line
 	10100 3100 10100 3300
 Wire Wire Line
-	9500 3200 10100 3200
+	9800 3200 10100 3200
 Connection ~ 10100 3200
-Wire Wire Line
-	9500 3200 9500 3100
-Connection ~ 9800 3200
-Wire Wire Line
-	9500 2800 9500 2700
-Connection ~ 9500 2700
 Wire Wire Line
 	9800 2800 9800 2700
 Connection ~ 9800 2700
@@ -581,6 +506,62 @@ F 3 "" H 3200 1150 50  0000 C CNN
 F 4 "Murata Electronics" H 3200 1150 60  0001 C CNN "MFG"
 F 5 "GRM188R71H104KA93D" H 3200 1150 60  0001 C CNN "MPN"
 	1    3200 1150
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1400 3100 1400 3200
+Wire Wire Line
+	1400 3200 1700 3200
+$Comp
+L CONN_01X04 J902
+U 1 1 59ACACB0
+P 4400 2950
+F 0 "J902" H 4400 3200 50  0000 C CNN
+F 1 "CONN_01X04" V 4500 2950 50  0000 C CNN
+F 2 "Connectors_Terminal_Blocks:TerminalBlock_Pheonix_PT-3.5mm_4pol" H 4400 2950 50  0001 C CNN
+F 3 "" H 4400 2950 50  0001 C CNN
+F 4 "Phoenix Contact" H 4400 2950 60  0001 C CNN "MFG"
+F 5 "1984633" H 4400 2950 60  0001 C CNN "MPN"
+	1    4400 2950
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_01X04 J903
+U 1 1 59ACAD02
+P 6500 2950
+F 0 "J903" H 6500 3200 50  0000 C CNN
+F 1 "CONN_01X04" V 6600 2950 50  0000 C CNN
+F 2 "Connectors_Terminal_Blocks:TerminalBlock_Pheonix_PT-3.5mm_4pol" H 6500 2950 50  0001 C CNN
+F 3 "" H 6500 2950 50  0001 C CNN
+F 4 "Phoenix Contact" H 6500 2950 60  0001 C CNN "MFG"
+F 5 "1984633" H 6500 2950 60  0001 C CNN "MPN"
+	1    6500 2950
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_01X04 J904
+U 1 1 59ACAD85
+P 8600 2950
+F 0 "J904" H 8600 3200 50  0000 C CNN
+F 1 "CONN_01X04" V 8700 2950 50  0000 C CNN
+F 2 "Connectors_Terminal_Blocks:TerminalBlock_Pheonix_PT-3.5mm_4pol" H 8600 2950 50  0001 C CNN
+F 3 "" H 8600 2950 50  0001 C CNN
+F 4 "Phoenix Contact" H 8600 2950 60  0001 C CNN "MFG"
+F 5 "1984633" H 8600 2950 60  0001 C CNN "MPN"
+	1    8600 2950
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_01X04 J905
+U 1 1 59ACADD3
+P 10700 2950
+F 0 "J905" H 10700 3200 50  0000 C CNN
+F 1 "CONN_01X04" V 10800 2950 50  0000 C CNN
+F 2 "Connectors_Terminal_Blocks:TerminalBlock_Pheonix_PT-3.5mm_4pol" H 10700 2950 50  0001 C CNN
+F 3 "" H 10700 2950 50  0001 C CNN
+F 4 "Phoenix Contact" H 10700 2950 60  0001 C CNN "MFG"
+F 5 "1984633" H 10700 2950 60  0001 C CNN "MPN"
+	1    10700 2950
 	1    0    0    -1  
 $EndComp
 $EndSCHEMATC

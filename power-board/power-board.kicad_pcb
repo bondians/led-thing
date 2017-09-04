@@ -1,4 +1,4 @@
-(kicad_pcb (version 4) (host pcbnew 4.0.6)
+(kicad_pcb (version 4) (host pcbnew 4.0.7)
 
   (general
     (links 590)
@@ -56,12 +56,12 @@
     (mod_text_width 0.15)
     (pad_size 1.7 1.7)
     (pad_drill 1)
-    (pad_to_mask_clearance 0.2)
+    (pad_to_mask_clearance 0)
     (aux_axis_origin 0 0)
     (visible_elements FFFFFF7F)
     (pcbplotparams
-      (layerselection 0x00030_80000001)
-      (usegerberextensions false)
+      (layerselection 0x011a8_80000007)
+      (usegerberextensions true)
       (excludeedgelayer true)
       (linewidth 0.100000)
       (plotframeref false)
@@ -81,9 +81,9 @@
       (subtractmaskfromsilk false)
       (outputformat 1)
       (mirror false)
-      (drillshape 1)
+      (drillshape 0)
       (scaleselection 1)
-      (outputdirectory ""))
+      (outputdirectory gerbers))
   )
 
   (net 0 "")
