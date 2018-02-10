@@ -1,6 +1,8 @@
 #ifndef ___n_conf_usb_h__
 #define ___n_conf_usb_h__
 
+#include "usb_task.h"
+
 #define USB_DEVICE_VENDOR_ID                USB_VID_ATMEL
 #define USB_DEVICE_PRODUCT_ID               USB_PID_ATMEL_ASF_CDC
 #define USB_DEVICE_MAJOR_VERSION            1
@@ -20,7 +22,7 @@
 
 #define UDI_CDC_ENABLE_EXT(port)            true
 #define UDI_CDC_DISABLE_EXT(port)           (void)port
-#define UDI_CDC_RX_NOTIFY(port)             (void)port
+#define UDI_CDC_RX_NOTIFY(port)             cdc_data_received()
 #define UDI_CDC_SET_CODING_EXT(port,cfg)    (void)port
 #define UDI_CDC_SET_DTR_EXT(port,set)       (void)port
 #define UDI_CDC_SET_RTS_EXT(port,set)       (void)port
