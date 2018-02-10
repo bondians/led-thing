@@ -1,0 +1,63 @@
+MOSFET selection notes:
+
+1. minimize R_DS(on)
+2. Vgs maximum rating > 14V (20V ideally)
+3. Vds maximum rating > max input surge voltage (~60V)
+4. during over-voltage, MOSFET will be used as linear regulator, with ~12% duty cycle.  Check MOSFET's "safe operating area" using Vds = Vin-Vout vs Id=Iload.  Adjust C_tmr to meet SOA limits if necessary.  For continuous OV, use Id=12% Iload.
+5. during over-current, easiest to assume worst-case (short).  check for both short full-current event in SOA as well as duty-cycle-adjusted continuous event, using Vds = Vin vs Id=Ilim (or Id=12% Ilim for continuous case)
+
+based on TVS characteristics, using Vin = 42V and surge = 60V
+Iload = 4A normally
+Ilim = 5A
+Vout = 24V (should be a conservative figure)
+max Vds = 18V
+
+Vishay Siliconix
+SIB456DK-T1-GE3
+==================
+1.  Rds(on) = 185 mΩ (4.625W@5A).  Current limit at Ta = 70C: 2.2A for 5s.
+2.  Vgs max = ±20V
+3.  Vds max = 100V
+4.  
+5.
+
+Nexperia 
+BUK7Y102-100B
+(θ_JC = 2.53K/W)
+(assuming θ_CA = 40K/W)
+=============
+1.  Rds(on) = 102 mΩ max @ 25C (2.55W@5A), 265mΩ @ 175C (6.625W@5A).  Current limit at Ta = 70C: ~2.9A, and probably not for long
+2.  Vgs max = ±20V
+3.  Vds max = 100V
+4.  Safe operating duration at Vds=18V, Id=5A: ~5ms
+    Safe operating duration at Vds=18V, Id=0.6A: continuous
+5.  Safe operating duration at Vds=42V, Id=5A: ~0.5ms
+    Safe operating duration at Vds=42V, Id=0.6A: continuous (maybe; right on the edge of DC region)
+
+Diodes, Inc
+DMT6016LSS
+(θ_JA = 85K/W)
+===========
+1.  Rds(on) = 18mΩ (0.45W@5A)
+2.  Vgs max = ±20V
+3.  Vds max = 60V
+5.  Safe operating duration at Vds=42V, Id=5A: ~100µs
+5.  Safe operating duration at Vds=42V, Id=0.6A: ~5ms
+
+ON Semiconductor
+NTD5867NL
+=========
+1.  Rds(on) = 39 mΩ (0.975W@5A)
+2. 
+
+Nexperia
+PSMN019-100YLX
+==============
+1.  Rds(on) = 19mΩ max (0.476W@5A, 0.304W@4A)
+2.  Vgs max = ±20V
+3.  Vds max = 100V
+4.  Safe operating duration at Vds=18V, Id=5A: ~5ms
+    Safe continuous operating current at Vds=18V: Id=~2.5A
+    Safe continuous operating voltage at Id=5A: ~9V
+5.  Safe operating duration at Vds=42V, Id=5A: ~500µs
+    Safe operating duration at Vds=42V, Id=0.6A: continuous
