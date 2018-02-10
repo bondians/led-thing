@@ -1,0 +1,6 @@
+[submodule "firmware/xmega-app/ext/cobs-c"]
+	path = firmware/xmega-app/ext/cobs-c
+	url = https://github.com/cmcqueen/cobs-c
+[submodule "firmware/xmega-app/ext/protobuf-c"]
+	path = firmware/xmega-app/ext/protobuf-c
+	url = https://github.com/mokus0/protobuf-c
