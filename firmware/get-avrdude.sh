@@ -57,4 +57,6 @@ sudo make install
 
 echo
 echo "Done.  Add $install_prefix/bin to your PATH, if it's not already there."
+echo "You may also need to set up the UDEV rules in avrdude-udev-rules, which"
+echo "configure Atmel DFU devices to be accessible by a group called \"avrdude\""
 echo
