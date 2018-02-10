@@ -96,4 +96,5 @@ Temporary Items
 .shake
 .shake.database
 build
-ext/asf
+xmega-app/ext/asf
+xmega-dfu-gcc/ext/asf

@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<exampleInfo>
+  <copyDir>../../common/xmega/drivers/cpu\</copyDir>
+  <copyDir>../../common/xmega/drivers/nvm\</copyDir>
+  <copyDir>../../common/common/utils\</copyDir>
+  <copyDir>../../common/xmega/utils/assembler\</copyDir>
+  <copyDir>../../common/xmega/utils\</copyDir>
+  <copyDir>../../common/common/services/clock/xmega\</copyDir>
+  <copyDir>../../common/common/services/usb/udc\</copyDir>
+  <copyDir>../../common/common/services/usb\</copyDir>
+  <copyDir>../../common/common/utils/interrupt\</copyDir>
+  <copyDir>../../common/xmega/boards/dummy\</copyDir>
+  <copyDir>../../common/common/boards\</copyDir>
+  <copyDir>../../common/xmega/drivers/usb\</copyDir>
+  <copyDir>../../common/xmega/utils/bit_handling\</copyDir>
+  <copyDir>../../common/xmega/utils/preprocessor\</copyDir>
+  <copyDir>../../common/common/services/clock\</copyDir>
+</exampleInfo>

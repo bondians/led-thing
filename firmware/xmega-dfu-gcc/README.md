@@ -1,0 +1,1 @@
+This is a GCC project to compile the atmel FLIPv2 bootloader, but the output is too large for this chip.  Keeping it here as I might be inspired someday to try to make it fit (but probably not) or we might make another run of boards sometime and use the ATXMEGA128A4U part instead, which does have a large enough boot area.
