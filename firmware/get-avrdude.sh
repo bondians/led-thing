@@ -18,6 +18,12 @@ ubuntu_deps=(
     libftdi1-dev
 )
 
+homebrew_deps=(
+    libelf
+    libusb
+    libftdi
+)
+
 mkdir -p "$download_dir"
 cd "$download_dir"
 
@@ -49,6 +55,8 @@ if [[ -f /etc/lsb-release ]]; then
         echo "Installing build dependencies"
         sudo apt-get install "${ubuntu_deps[@]}"
     fi
+elif [[ "$(uname)" = "Darwin" ]]; then
+    brew install "${homebrew_deps[@]}"
 fi
 
 ./configure --prefix="$install_prefix"
