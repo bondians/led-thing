@@ -18,7 +18,7 @@
 
 #define UDI_CDC_PORT_NB 1
 // on parts with less SRAM this is probably necessary
-// #define UDI_CDC_LOW_RATE
+#define UDI_CDC_LOW_RATE
 
 #define UDI_CDC_ENABLE_EXT(port)            true
 #define UDI_CDC_DISABLE_EXT(port)           (void)port
