@@ -2,6 +2,7 @@
 
 #include "sleep_lock.h"
 
+#include <cobsr.h>
 #include <udc.h>
 #include <udi_cdc.h>
 #include <string.h>
@@ -88,30 +89,53 @@ static bool rx_buf_resize(iram_size_t content_size) {
 
 // TODO: properly pre-encoded OOM message
 static const char oom_pstr[] PROGMEM = "Out of memory!";
+static const char decode_err_pstr[] PROGMEM = "Decode error!";
+static const char encode_err_pstr[] PROGMEM = "Encode error!";
 
 static int rot13(int ch) {
     if ('a' <= ch && ch <= 'z') {
         ch = 'a' + (ch - 'a' + 13) % 26;
     } else if ('A' <= ch && ch <= 'Z') {
-        ch = 'A' + (ch - 'Z' + 13) % 26;
+        ch = 'A' + (ch - 'A' + 13) % 26;
     }
     
     return ch;
 }
 
-static void rx_message(const uint8_t *buf, iram_size_t size) {
+static void rx_message(uint8_t *buf, iram_size_t size) {
+    // got a message.  For testing:
+    //      1. COBSR-decode it into msg (pre-allocated big enough for step 3)
+    //      2. ROT13 it, copying it back into buf in the process
+    //      3. COBSR-encode it into msg send it back
     // for testing, ROT13 the message and send it back to TX
-    uint8_t *msg = malloc(size);
+    size_t msg_bufsz = COBSR_ENCODE_DST_BUF_LEN_MAX(size);
+    if (msg_bufsz < 1) msg_bufsz = 1;
+    
+    uint8_t *msg = malloc(msg_bufsz);
     if (msg == NULL) {
         usb_send_message_P(oom_pstr, strlen_P(oom_pstr));
         return;
     }
     
-    for (iram_size_t i = 0; i < size; i++) {
-        msg[i] = rot13(buf[i]);
+    cobsr_decode_result dec_result = cobsr_decode(msg, msg_bufsz, buf, size);
+    if (dec_result.status != COBSR_DECODE_OK) {
+        free(msg);
+        usb_send_message_P(decode_err_pstr, strlen_P(decode_err_pstr));
+        return;
     }
     
-    if (!usb_send_message(msg, size, true)) {
+    for (iram_size_t i = 0; i < dec_result.out_len; i++) {
+        buf[i] = rot13(msg[i]);
+    }
+    
+    cobsr_encode_result enc_result = cobsr_encode(msg, msg_bufsz, buf, dec_result.out_len);
+    if (enc_result.status != COBSR_ENCODE_OK) {
+        free(msg);
+        usb_send_message_P(encode_err_pstr, strlen_P(encode_err_pstr));
+        return;
+    }
+    
+    if (!usb_send_message(msg, enc_result.out_len, true)) {
         free(msg);
     }
 }
@@ -153,6 +177,7 @@ static bool rx_bytes(iram_size_t count) {
     for (iram_size_t i = rx_count; i < new_rx_count; i++) {
         if (rx_buf[i] == RX_MESSAGE_DELIMITER) {
             rx_message(rx_buf + msg_start, i - msg_start);
+            rx_buf[i] = RX_MESSAGE_DELIMITER;
             msg_start = i + 1;
         }
     }

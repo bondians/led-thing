@@ -1,0 +1,129 @@
+syntax = "proto2";
+
+enum ProtocolVersion {
+    V0 = 0;
+}
+
+enum ResultStatus {
+    OK = 0;
+    ERROR = 1;
+    
+    // more-specific error types
+    MESSAGE_BUFFER_OVERRUN = 2;
+    INVALID_REQUEST = 3;
+    UNSUPPORTED_OPERATION = 4;
+}
+
+enum ChannelFormat {
+    SCALAR = 0;
+    RGB = 1;
+    RGBW = 2;
+}
+
+enum ChannelDriver {
+    NONE = 0;
+    APA102 = 1;
+    LPD8806 = 2;
+    SK6812 = 3;
+    WS2801 = 4;
+    WS2811 = 5;
+    WS2812 = 6;
+}
+
+message ChannelStructure {
+    optional uint32 channel_number = 1;
+    optional ChannelFormat format = 2;
+    optional ChannelDriver driver = 3;
+    optional uint32 channel_count = 4;
+}
+
+message HelloRequest {
+    optional uint32 request_id = 1;
+    optional ProtocolVersion protocol_version = 2;
+}
+message HelloResponse {
+    optional uint32 request_id = 1;
+    optional ResultStatus status = 2;
+    optional string status_message = 3;
+}
+
+message ListChannelsRequest {
+    optional uint32 request_id = 1;
+}
+message ListChannelsResponse {
+    optional uint32 request_id = 1;
+    repeated ChannelStructure channels = 2;
+}
+
+message CreateChannelRequest {
+    optional uint32 request_id = 1;
+    optional ChannelStructure channel = 2;
+}
+message CreateChannelResponse {
+    optional uint32 request_id = 1;
+    optional ResultStatus status = 2;
+    optional string status_message = 3;
+}
+
+message DeleteChannelRequest {
+    optional uint32 request_id = 1;
+    optional uint32 channelNumber = 2;
+}
+message DeleteChannelResponse {
+    optional uint32 request_id = 1;
+    optional ResultStatus status = 2;
+    optional string status_message = 3;
+}
+
+message ReadChannelRequest {
+    optional uint32 request_id = 1;
+    optional uint32 channel = 2;
+    optional uint32 offset = 3; // default 0
+    optional uint32 count = 4; // default 1
+}
+message ReadChannelResponse {
+    optional uint32 request_id = 1;
+    optional ResultStatus status = 2;
+    optional string status_message = 3;
+    optional bytes data = 4;
+}
+
+
+message WriteChannelRequest {
+    optional uint32 request_id = 1;
+    optional uint32 channel = 2;
+    optional uint32 offset = 3;
+    optional bytes data = 4;
+}
+message WriteChannelResponse {
+    optional uint32 request_id = 1;
+    optional ResultStatus status = 2;
+    optional string status_message = 3;
+}
+
+service BufferedLedService {
+    rpc Hello (HelloRequest) returns (HelloResponse);
+    rpc ListChannels (ListChannelsRequest) returns (ListChannelsResponse);
+    rpc CreateChannel (CreateChannelRequest) returns (CreateChannelResponse);
+    rpc DeleteChannel (DeleteChannelRequest) returns (DeleteChannelResponse);
+    rpc ReadChannel (ReadChannelRequest) returns (ReadChannelResponse);
+    rpc WriteChannel (WriteChannelRequest) returns (WriteChannelResponse);
+}
+
+// wire message used to implement the RPC, as well as any async messages used, if any
+message WireMessage {
+    oneof message {
+        HelloRequest                hello_request = 100;
+        HelloResponse               hello_response = 101;
+        ListChannelsRequest         list_channels_request = 102;
+        ListChannelsResponse        list_channels_response = 103;
+        CreateChannelRequest        create_channel_request = 104;
+        CreateChannelResponse       create_channel_response = 105;
+        DeleteChannelRequest        delete_channel_request = 106;
+        DeleteChannelResponse       delete_channel_response = 107;
+        ReadChannelRequest          read_channel_request = 1;
+        ReadChannelResponse         read_channel_response = 2;
+        WriteChannelRequest         write_channel_request = 3;
+        WriteChannelResponse        write_channel_response = 4;
+    }
+}
