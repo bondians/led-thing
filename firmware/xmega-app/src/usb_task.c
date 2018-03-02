@@ -102,15 +102,41 @@ static int rot13(int ch) {
     return ch;
 }
 
-static void rx_message(uint8_t *buf, iram_size_t size) {
+static void rx_message(uint8_t *msg, iram_size_t size) {
     // got a message.  For testing:
-    //      1. COBSR-decode it into msg (pre-allocated big enough for step 3)
-    //      2. ROT13 it, copying it back into buf in the process
-    //      3. COBSR-encode it into msg send it back
-    // for testing, ROT13 the message and send it back to TX
-    size_t msg_bufsz = COBSR_ENCODE_DST_BUF_LEN_MAX(size);
+    //      1. ROT13 it in-place
+    //      2. COBSR-encode it into a newly allocated buffer and send it back
+    
+    size_t out_bufsz = COBSR_ENCODE_DST_BUF_LEN_MAX(size);
+    uint8_t *out = malloc(out_bufsz);
+    if (out == NULL) {
+        usb_send_message_P(oom_pstr, strlen_P(oom_pstr));
+        return;
+    }
+    
+    for (iram_size_t i = 0; i < size; i++) {
+        msg[i] = rot13(msg[i]);
+    }
+    
+    cobsr_encode_result enc_result = cobsr_encode(out, out_bufsz, msg, size);
+    if (enc_result.status != COBSR_ENCODE_OK) {
+        free(out);
+        usb_send_message_P(encode_err_pstr, strlen_P(encode_err_pstr));
+        return;
+    }
+    
+    if (!usb_send_message(out, enc_result.out_len, true)) {
+        free(out);
+    }
+}
+
+// got a frame (a run of non-zero bytes).  decode it and pass it to rx_message.
+static void rx_frame(uint8_t *buf, iram_size_t size) {
+    size_t msg_bufsz = COBSR_DECODE_DST_BUF_LEN_MAX(size);
     if (msg_bufsz < 1) msg_bufsz = 1;
     
+    // TODO: implement an in-place COBSR decode, or prove that the
+    // existing one is safe to use in-place
     uint8_t *msg = malloc(msg_bufsz);
     if (msg == NULL) {
         usb_send_message_P(oom_pstr, strlen_P(oom_pstr));
@@ -124,20 +150,9 @@ static void rx_message(uint8_t *buf, iram_size_t size) {
         return;
     }
     
-    for (iram_size_t i = 0; i < dec_result.out_len; i++) {
-        buf[i] = rot13(msg[i]);
-    }
-    
-    cobsr_encode_result enc_result = cobsr_encode(msg, msg_bufsz, buf, dec_result.out_len);
-    if (enc_result.status != COBSR_ENCODE_OK) {
-        free(msg);
-        usb_send_message_P(encode_err_pstr, strlen_P(encode_err_pstr));
-        return;
-    }
-    
-    if (!usb_send_message(msg, enc_result.out_len, true)) {
-        free(msg);
-    }
+    memcpy(buf, msg, dec_result.out_len);
+    free(msg);
+    rx_message(buf, dec_result.out_len);
 }
 
 // try to read some data, and process any completed messages.
@@ -176,7 +191,7 @@ static bool rx_bytes(iram_size_t count) {
     iram_size_t new_rx_count = rx_count + count;
     for (iram_size_t i = rx_count; i < new_rx_count; i++) {
         if (rx_buf[i] == RX_MESSAGE_DELIMITER) {
-            rx_message(rx_buf + msg_start, i - msg_start);
+            rx_frame(rx_buf + msg_start, i - msg_start);
             rx_buf[i] = RX_MESSAGE_DELIMITER;
             msg_start = i + 1;
         }
