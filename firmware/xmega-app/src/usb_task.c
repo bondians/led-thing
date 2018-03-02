@@ -1,28 +1,20 @@
 #include "usb_task.h"
 
+#include "message.h"
 #include "sleep_lock.h"
 
-#include <cobsr.h>
 #include <udc.h>
 #include <udi_cdc.h>
 #include <string.h>
 
-#define RX_MESSAGE_DELIMITER            '\0'
 #define RX_BUFFER_SIZE_MIN              64
 #define RX_BUFFER_SIZE_INCREMENT        64
 
-#define TX_MESSAGE_DELIMITER            '\0'
 #define TX_QUEUE_SIZE                   8
 
 static uint8_t *rx_buf = NULL;
 static iram_size_t rx_buf_size = 0;
 static iram_size_t rx_count = 0;
-
-enum {
-    MEM_SPACE_RAM, // message is in RAM
-    MEM_SPACE_RAM_FREE, // message is in RAM and should be free()ed after sending
-    MEM_SPACE_PROGMEM, // message is in program flash
-};
 
 typedef struct {
     const void *message;
@@ -87,74 +79,6 @@ static bool rx_buf_resize(iram_size_t content_size) {
     return true;
 }
 
-// TODO: properly pre-encoded OOM message
-static const char oom_pstr[] PROGMEM = "Out of memory!";
-static const char decode_err_pstr[] PROGMEM = "Decode error!";
-static const char encode_err_pstr[] PROGMEM = "Encode error!";
-
-static int rot13(int ch) {
-    if ('a' <= ch && ch <= 'z') {
-        ch = 'a' + (ch - 'a' + 13) % 26;
-    } else if ('A' <= ch && ch <= 'Z') {
-        ch = 'A' + (ch - 'A' + 13) % 26;
-    }
-    
-    return ch;
-}
-
-static void rx_message(uint8_t *msg, iram_size_t size) {
-    // got a message.  For testing:
-    //      1. ROT13 it in-place
-    //      2. COBSR-encode it into a newly allocated buffer and send it back
-    
-    size_t out_bufsz = COBSR_ENCODE_DST_BUF_LEN_MAX(size);
-    uint8_t *out = malloc(out_bufsz);
-    if (out == NULL) {
-        usb_send_message_P(oom_pstr, strlen_P(oom_pstr));
-        return;
-    }
-    
-    for (iram_size_t i = 0; i < size; i++) {
-        msg[i] = rot13(msg[i]);
-    }
-    
-    cobsr_encode_result enc_result = cobsr_encode(out, out_bufsz, msg, size);
-    if (enc_result.status != COBSR_ENCODE_OK) {
-        free(out);
-        usb_send_message_P(encode_err_pstr, strlen_P(encode_err_pstr));
-        return;
-    }
-    
-    if (!usb_send_message(out, enc_result.out_len, true)) {
-        free(out);
-    }
-}
-
-// got a frame (a run of non-zero bytes).  decode it and pass it to rx_message.
-static void rx_frame(uint8_t *buf, iram_size_t size) {
-    size_t msg_bufsz = COBSR_DECODE_DST_BUF_LEN_MAX(size);
-    if (msg_bufsz < 1) msg_bufsz = 1;
-    
-    // TODO: implement an in-place COBSR decode, or prove that the
-    // existing one is safe to use in-place
-    uint8_t *msg = malloc(msg_bufsz);
-    if (msg == NULL) {
-        usb_send_message_P(oom_pstr, strlen_P(oom_pstr));
-        return;
-    }
-    
-    cobsr_decode_result dec_result = cobsr_decode(msg, msg_bufsz, buf, size);
-    if (dec_result.status != COBSR_DECODE_OK) {
-        free(msg);
-        usb_send_message_P(decode_err_pstr, strlen_P(decode_err_pstr));
-        return;
-    }
-    
-    memcpy(buf, msg, dec_result.out_len);
-    free(msg);
-    rx_message(buf, dec_result.out_len);
-}
-
 // try to read some data, and process any completed messages.
 // 'count' is taken as a hint - the actual read may be more or less.
 static bool rx_bytes(iram_size_t count) {
@@ -171,7 +95,7 @@ static bool rx_bytes(iram_size_t count) {
             rx_count = 0;
             rx_buf_resize(0);
             
-            usb_send_message_P(oom_pstr, strlen_P(oom_pstr));
+            msg_send_error(oom_pstr, &usb_send_message);
             
             return false;
         }
@@ -190,9 +114,9 @@ static bool rx_bytes(iram_size_t count) {
     iram_size_t msg_start = 0;
     iram_size_t new_rx_count = rx_count + count;
     for (iram_size_t i = rx_count; i < new_rx_count; i++) {
-        if (rx_buf[i] == RX_MESSAGE_DELIMITER) {
-            rx_frame(rx_buf + msg_start, i - msg_start);
-            rx_buf[i] = RX_MESSAGE_DELIMITER;
+        if (rx_buf[i] == RX_FRAME_DELIMITER) {
+            rx_frame(rx_buf + msg_start, i - msg_start, &usb_send_message);
+            rx_buf[i] = RX_FRAME_DELIMITER;
             msg_start = i + 1;
         }
     }
@@ -225,7 +149,7 @@ static PT_THREAD(rx_task(struct pt *pt)) {
             
             while(1) {
                 PT_WAIT_UNTIL(pt, udi_cdc_is_rx_ready());
-                if (udi_cdc_getc() == RX_MESSAGE_DELIMITER) break;
+                if (udi_cdc_getc() == RX_FRAME_DELIMITER) break;
             }
         }
     }
@@ -233,26 +157,12 @@ static PT_THREAD(rx_task(struct pt *pt)) {
     PT_END(pt);
 }
 
-bool usb_send_message(const void *buf, size_t size, bool free_afterward) {
+bool usb_send_message(const void *buf, size_t size, msg_space_t space) {
     if (tx_count >= TX_QUEUE_SIZE) return false;
     
     uint8_t slot = (tx_head + tx_count) % TX_QUEUE_SIZE;
     tx_queue[slot] = (tx_message_t) {
-        .mem_space          = free_afterward ? MEM_SPACE_RAM_FREE : MEM_SPACE_RAM,
-        .message_length     = size,
-        .message            = buf,
-    };
-    
-    tx_count++;
-    return true;
-}
-
-bool usb_send_message_P(const void *buf, size_t size) {
-    if (tx_count >= TX_QUEUE_SIZE) return false;
-    
-    uint8_t slot = (tx_head + tx_count) % TX_QUEUE_SIZE;
-    tx_queue[slot] = (tx_message_t) {
-        .mem_space          = MEM_SPACE_PROGMEM,
+        .mem_space          = space,
         .message_length     = size,
         .message            = buf,
     };
@@ -264,13 +174,13 @@ bool usb_send_message_P(const void *buf, size_t size) {
 static iram_size_t usb_send_bytes(const void *buf, iram_size_t size, uint8_t mem_space) {
     switch (mem_space) {
         default:
-        case MEM_SPACE_RAM:
-        case MEM_SPACE_RAM_FREE:
+        case MSG_SPACE_RAM:
+        case MSG_SPACE_RAM_FREE:
         {
             return size - udi_cdc_write_buf(buf, size);
         }
         
-        case MEM_SPACE_PROGMEM:
+        case MSG_SPACE_PROGMEM:
         {
             iram_size_t tx_available = udi_cdc_get_free_tx_buffer();
             if (tx_available < size) size = tx_available;
@@ -316,7 +226,7 @@ static PT_THREAD(tx_task(struct pt *pt)) {
             tx_msg_offset += sent;
         }
         
-        if (tx_queue[tx_head].mem_space == MEM_SPACE_RAM_FREE) {
+        if (tx_queue[tx_head].mem_space == MSG_SPACE_RAM_FREE) {
             free((void *) tx_queue[tx_head].message);
         }
         
@@ -324,7 +234,7 @@ static PT_THREAD(tx_task(struct pt *pt)) {
         tx_head = (tx_head + 1) % TX_QUEUE_SIZE;
         
         PT_WAIT_UNTIL(pt, udi_cdc_is_tx_ready());
-        udi_cdc_putc(TX_MESSAGE_DELIMITER);
+        udi_cdc_putc(TX_FRAME_DELIMITER);
     }
     
     PT_END(pt);
