@@ -47,6 +47,7 @@ message HelloResponse {
     optional string status_message = 3;
 }
 
+
 message ListChannelsRequest {
     optional uint32 request_id = 1;
 }
@@ -101,6 +102,121 @@ message WriteChannelResponse {
     optional string status_message = 3;
 }
 
+message ListCommandsRequest {
+    optional uint32 request_id = 1;
+    optional uint32 offset = 2;
+    optional uint32 count = 3;
+}
+
+message ListCommandsResponse {
+    optional uint32 request_id = 1;
+    optional ResultStatus status = 2;
+    optional string status_message = 3;
+    repeated string command = 4;
+    optional bool more = 5;
+}
+
+message DescribeCommandRequest {
+    optional uint32 request_id = 1;
+    optional string command = 2;
+}
+
+message DescribeCommandResponse {
+    optional uint32 request_id = 1;
+    optional ResultStatus status = 2;
+    optional string status_message = 3;
+    optional string command = 4;
+    optional string description = 5;
+}
+
+message PerformCommandRequest {
+    optional uint32 request_id = 1;
+    optional string command = 2;
+    repeated string args = 3;
+}
+
+message PerformCommandResponse {
+    optional uint32 request_id = 1;
+    optional ResultStatus status = 2;
+    optional string status_message = 3;
+    
+    optional uint32 process_id = 4;
+    repeated string immediate_output = 5;
+}
+
+message ListPropertiesRequest {
+    optional uint32 request_id = 1;
+    optional uint32 offset = 2;
+    optional uint32 count = 3;
+}
+
+message ListPropertiesResponse {
+    optional uint32 request_id = 1;
+    optional ResultStatus status = 2;
+    optional string status_message = 3;
+    repeated string property = 4;
+    optional bool more = 5;
+}
+
+message DescribePropertyRequest {
+    optional uint32 request_id = 1;
+    optional string property = 2;
+}
+
+message DescribePropertyResponse {
+    optional uint32 request_id = 1;
+    optional ResultStatus status = 2;
+    optional string status_message = 3;
+    optional string property = 4;
+    optional string description = 5;
+}
+
+message ReadPropertyRequest {
+    optional uint32 request_id = 1;
+    optional string property = 2;
+}
+
+message ReadPropertyResponse {
+    optional uint32 request_id = 1;
+    optional ResultStatus status = 2;
+    optional string status_message = 3;
+    optional string value = 4;
+}
+
+message WritePropertyRequest {
+    optional uint32 request_id = 1;
+    optional string property = 2;
+    optional string value = 3;
+}
+
+message WritePropertyResponse {
+    optional uint32 request_id = 1;
+    optional ResultStatus status = 2;
+    optional string status_message = 3;
+    optional string value = 4;
+}
+
+
+message SelfTestRequest {
+    optional uint32 request_id = 1;
+}
+message SelfTestResponse {
+    optional uint32 request_id = 1;
+    optional ResultStatus status = 2;
+    optional string status_message = 3;
+    repeated string self_test_warning = 4;
+    repeated string self_test_error = 5;
+}
+
+message DfuRequest {
+    optional uint32 request_id = 1;
+}
+message DfuResponse {
+    optional uint32 request_id = 1;
+    optional ResultStatus status = 2;
+    optional string status_message = 3;
+}
+
 service BufferedLedService {
     rpc Hello (HelloRequest) returns (HelloResponse);
     rpc ListChannels (ListChannelsRequest) returns (ListChannelsResponse);
@@ -108,11 +224,24 @@ service BufferedLedService {
     rpc DeleteChannel (DeleteChannelRequest) returns (DeleteChannelResponse);
     rpc ReadChannel (ReadChannelRequest) returns (ReadChannelResponse);
     rpc WriteChannel (WriteChannelRequest) returns (WriteChannelResponse);
+    rpc SelfTest (SelfTestRequest) returns (SelfTestResponse);
+    rpc Dfu (DfuRequest) returns (DfuResponse);
 }
 
 // wire message used to implement the RPC, as well as any async messages used, if any
 message WireMessage {
     oneof message {
+        ReadChannelRequest          read_channel_request = 1;
+        ReadChannelResponse         read_channel_response = 2;
+        WriteChannelRequest         write_channel_request = 3;
+        WriteChannelResponse        write_channel_response = 4;
+        PerformCommandRequest       perform_command_request = 5;
+        PerformCommandResponse      perform_command_response = 6;
+        ReadPropertyRequest         read_property_request = 7;
+        ReadPropertyResponse        read_property_response = 8;
+        WritePropertyRequest        write_property_request = 9;
+        WritePropertyResponse       write_property_response = 10;
+        
         HelloRequest                hello_request = 100;
         HelloResponse               hello_response = 101;
         ListChannelsRequest         list_channels_request = 102;
@@ -121,9 +250,17 @@ message WireMessage {
         CreateChannelResponse       create_channel_response = 105;
         DeleteChannelRequest        delete_channel_request = 106;
         DeleteChannelResponse       delete_channel_response = 107;
-        ReadChannelRequest          read_channel_request = 1;
-        ReadChannelResponse         read_channel_response = 2;
-        WriteChannelRequest         write_channel_request = 3;
-        WriteChannelResponse        write_channel_response = 4;
+        SelfTestRequest             self_test_request = 108;
+        SelfTestResponse            self_test_response = 109;
+        DfuRequest                  dfu_request = 110;
+        DfuResponse                 dfu_response = 111;
+        ListCommandsRequest         list_commands_request = 112;
+        ListCommandsResponse        list_commands_response = 113;
+        DescribeCommandRequest      describe_command_request = 114;
+        DescribeCommandResponse     describe_command_response = 115;
+        ListPropertiesRequest       list_properties_request = 116;
+        ListPropertiesResponse      list_properties_response = 117;
+        DescribePropertyRequest     describe_property_request = 118;
+        DescribePropertyResponse    describe_property_response = 119;
     }
 }
